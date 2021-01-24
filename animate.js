@@ -54,13 +54,17 @@ function init(){
     });
 
     function addRandomPoint() {
-        var x = Math.random()*360 -100;
-        console.log('x',x)
+        var x = Math.random()*360 -180;
+        // console.log('x',x)
         var y = Math.random()*180 -90;
+        // console.log('y',y)
         var geom = new ol.geom.Point(ol.proj.fromLonLat([x,y]));
+        console.log('geom',geom)
         var feat = new ol.Feature(geom);
+        console.log('feat',feat)
         feat.setStyle(pointStyle);
         source.addFeature(feat);
+        
     }
 
     var duration = 2000;
@@ -81,7 +85,7 @@ function init(){
                 image: new ol.style.Circle({
                     radius: radius,
                     stroke: new ol.style.Stroke({
-                        color: 'rgba(255, 0, 0 '+ opacity + ')',
+                        color: 'rgb(255, 0, 0 '+ opacity + ')',
                         width:0.25 + opacity
                     })
                 })
@@ -103,6 +107,6 @@ function init(){
     source.on('addfeature',function(e){
         flash(e.feature);
     });
-    window.setInterval(addRandomPoint,1000);
+    window.setInterval(addRandomPoint,2000);
 
 }
