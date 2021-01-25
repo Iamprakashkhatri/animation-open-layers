@@ -6,7 +6,8 @@ function init(){
     
     //Define a view
     var view = new ol.View({
-        center:[9275174.760236427, 3228700.074765845],
+        // projection:'EPSG:4326',
+        center:[9275174.760236427, 89.91279602050781 ],
         zoom:12
     });
     //Define basemap
@@ -47,7 +48,7 @@ function init(){
         source :ImageSource
     });
     //Adding layer to map
-    map.addLayer(ImageLayer)
+    // map.addLayer(ImageLayer)
 
     //Image source for another image
 
@@ -73,13 +74,13 @@ function init(){
     //Adding image based on coordinates
     // LAYER-> SOURCE -> FEATURE:CO-ORDINATE and image:
     Feature = new ol.Feature({
-        geometry : new ol.geom.Point([9275174.760236427, 3228700.074765845])
+        geometry : new ol.geom.Point([9065174.760236427, 2928700.074765845])
     })
 
     style = new ol.style.Style({
         image: new ol.style.Icon({
-            src:'./images/fb.svg',
-            scale:2
+            src:'./images/Ready.png',
+            scale:0.05
         })
     });
     Feature.setStyle(style)
@@ -124,9 +125,173 @@ function init(){
     // map.addLayer(imageLayer)
 
 
+
+    // Vector Layers
+
+    var inputJSON = {
+        "type": "FeatureCollection",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {},
+            "geometry": {
+              "type": "Polygon",
+              "coordinates": [
+                [
+                  [
+                    81.441650390625,
+                    29.888280933159265
+                  ],
+                  [
+                    80.57373046875,
+                    29.544787796199465
+                  ],
+                  [
+                    80.540771484375,
+                    28.98892237190413
+                  ],
+                  [
+                    81.23291015625,
+                    28.65203063036226
+                  ],
+                  [
+                    81.82617187499999,
+                    29.094577077511826
+                  ],
+                  [
+                    81.123046875,
+                    29.19053283229458
+                  ],
+                  [
+                    82.5732421875,
+                    29.38217507514529
+                  ],
+                  [
+                    82.30957031249999,
+                    29.80251790576445
+                  ],
+                  [
+                    81.441650390625,
+                    29.888280933159265
+                  ]
+                ]
+              ]
+            }
+          }
+        ]
+      }
+      
+      //Vector source
+      var vectorSource = new ol.source.Vector({
+          features:(new ol.format.GeoJSON().readFeatures(inputJSON))
+      })
+      // Vector Layer
+      var vectorLayer = new ol.layer.Vector({
+          source:vectorSource,
+          style: new ol.style.Style({
+              stroke: new ol.style.Stroke({
+                  color:'#ff00ff',
+                  width:4,
+                  lineDash:[5,10]
+              })
+          })
+      })
+
+    //   map.addLayer(vectorLayer)
+
+    var extSource = new ol.source.Vector({
+        format: new ol.format.GeoJSON(),
+        url:'./data/vector_data/lodha-map.geojson'
+    })
+    var extLayer = new ol.layer.Vector({
+        source:extSource,
+        style: new ol.style.Style({
+            fill:new ol.style.Fill({
+                color:'rgba(142,226,136,0.5)'
+            }),
+            stroke: new ol.style.Stroke({
+                color:'#000000',
+                width:3
+            })
+        })
+    })
+
+    // map.addLayer(extLayer)
+ 
+  // Using properties and providing color
+
+  var externalSource = new ol.source.Vector({
+      format: new ol.format.GeoJSON(),
+      url:'./data/vector_data/polygons.geojson'
+  })
+  var propLayer = new ol.layer.Vector({
+      source:externalSource,
+      style: function(feature){
+        if(feature.getProperties().prop=='a'){
+          return new ol.style.Style({
+              fill:new ol.style.Fill({
+                  color:'#ff0000'
+              }),
+              stroke: new ol.style.Stroke({
+                  color:'#000000',
+                  width:3
+              })
+        })
+        }
+        else if(feature.getProperties().prop=='b'){
+          return new ol.style.Style({
+              fill:new ol.style.Fill({
+                  color:'#ffff00'
+              }),
+              stroke: new ol.style.Stroke({
+                  color:'#000000',
+                  width:3
+              })
+        })
+        }
+        else {
+          return new ol.style.Style({
+            fill:new ol.style.Fill({
+                color:'#00ffff'
+            }),
+            stroke: new ol.style.Stroke({
+                color:'#000000',
+                width:3
+            })
+      })
+        }
+      }
+  })
+
+  // map.addLayer(propLayer)
+
+
+    //Create Heatmap
+    //Define heatmap source
+
+    var heatmapsource = new ol.source.Vector({
+      format: new ol.format.GeoJSON(),
+      url:'./data/vector_data/linemap.geojson'
+    })
+    //Define heatmap layer
+    var heatmaplayer = new ol.layer.Heatmap({
+      source:heatmapsource
+    })
+    // map.addLayer(heatmaplayer)
+
+    //Graticule
+    // var graticule = new ol.layer.Graticule({
+    //   map:map,
+    //   showLabels:true
+    // })
+
+
+
+
 }
 var n = new init()
 // console.log(map)
 // console.log('feature',Feature)
 // console.log('style',style)
 console.log('feature',Feature.get('geometry'))
+// console.log('heatmap',heatmaplayer)
